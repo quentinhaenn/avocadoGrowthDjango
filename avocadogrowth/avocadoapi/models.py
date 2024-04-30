@@ -58,7 +58,7 @@ class Comments(models.Model):
     rating = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_commenting')
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_commented')
+    to_user = models.ForeignKey(Mentor, on_delete=models.CASCADE, related_name='mentor_commented')
     stacks = models.ManyToManyField(Stacks)
 
     def __str__(self):
