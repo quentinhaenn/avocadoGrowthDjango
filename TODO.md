@@ -1,0 +1,26 @@
+# TODOs
+
+- [ ] Add login logic
+- [ ] Add logout logic
+- [ ] Add register logic
+- [ ] Add user profile logic
+- [ ] Add user profile edit logic
+- [ ] Add user profile delete logic
+- [ ] Add user profile image upload logic
+- [ ] Add user profile image delete logic
+- [ ] Add user profile image update logic
+- [ ] Add user profile password update logic
+- [ ] Add user profile password reset logic
+- [ ] Add 2FA logic
+- [ ] Add 2FA enable logic
+- [ ] Add 2FA disable logic
+- [ ] Add Landing Page logic
+- [ ] Add Home Page logic
+- [ ] Add About Page logic
+- [ ] Add Contact Page logic
+- [ ] Add chat logic
+- [ ] Add chat E2E encryption logic
+- [ ] Add Comments logic
+- [ ] Add Requests logic
+- [ ] Add Notifications logic
+- [ ] Add mentor research logic
