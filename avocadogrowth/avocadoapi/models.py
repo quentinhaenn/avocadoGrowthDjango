@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class Stacks(models.Model):
     id = models.AutoField(primary_key=True)
-    tag = models.CharField(max_length=30)
+    tag = models.CharField(max_length=30, unique=True)
 
     def __str__(self):
         return self.tag
@@ -34,6 +34,15 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True)
     learning_stacks = models.ManyToManyField(Stacks, default=None)
 
+    def is_mentor(self):
+        return Mentor.objects.filter(user=self).exists()
+
+    def get_requests(self):
+        return Requests.objects.filter(from_user=self)
+
+    def get_stacks(self):
+        return self.learning_stacks.all()
+
     def __str__(self):
         return self.username if self.username else self.email
 
@@ -47,6 +56,15 @@ class Mentor(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     stacks = models.ManyToManyField(Stacks)
+
+    def get_comments(self):
+        return Comments.objects.filter(to_user=self)
+
+    def get_requests(self):
+        return Requests.objects.filter(to_mentor=self)
+
+    def get_stacks(self):
+        return self.stacks.all()
 
     def __str__(self):
         return self.user.username if self.user.username else self.user.email
