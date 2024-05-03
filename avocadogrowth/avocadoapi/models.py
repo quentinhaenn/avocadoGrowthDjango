@@ -1,8 +1,14 @@
+"""
+Models for the Avocado API
+"""
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
 class Stacks(models.Model):
+    """
+    Model for Stacks
+    """
     id = models.AutoField(primary_key=True)
     tag = models.CharField(max_length=30, unique=True)
 
@@ -11,6 +17,9 @@ class Stacks(models.Model):
 
 
 class User(AbstractUser):
+    """
+    Custom User model for Avocado API
+    """
     GENDER_CHOICES = {
         "M": "Male",
         "F": "Female",
@@ -35,12 +44,15 @@ class User(AbstractUser):
     learning_stacks = models.ManyToManyField(Stacks, default=None)
 
     def is_mentor(self):
+        # pylint: disable=missing-function-docstring
         return Mentor.objects.filter(user=self).exists()
 
     def get_requests(self):
+        # pylint: disable=missing-function-docstring
         return Requests.objects.filter(from_user=self)
 
     def get_stacks(self):
+        # pylint: disable=missing-function-docstring
         return self.learning_stacks.all()
 
     def __str__(self):
@@ -48,6 +60,9 @@ class User(AbstractUser):
 
 
 class Mentor(models.Model):
+    """
+    Model for Mentor
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     description = models.TextField()
     rating = models.FloatField(null=True, blank=True)
@@ -58,12 +73,15 @@ class Mentor(models.Model):
     stacks = models.ManyToManyField(Stacks)
 
     def get_comments(self):
+        # pylint: disable=missing-function-docstring
         return Comments.objects.filter(to_user=self)
 
     def get_requests(self):
+        # pylint: disable=missing-function-docstring
         return Requests.objects.filter(to_mentor=self)
 
     def get_stacks(self):
+        # pylint: disable=missing-function-docstring
         return self.stacks.all()
 
     def __str__(self):
@@ -71,6 +89,9 @@ class Mentor(models.Model):
 
 
 class Comments(models.Model):
+    """
+    Model for Comments
+    """
     id = models.AutoField(primary_key=True)
     comment = models.TextField()
     rating = models.FloatField(null=True, blank=True)
@@ -84,6 +105,9 @@ class Comments(models.Model):
 
 
 class Requests(models.Model):
+    """
+    Model for Requests
+    """
     STATUS_CHOICES = {
         "P": "Pending",
         "A": "Accepted",

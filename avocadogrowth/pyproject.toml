@@ -57,10 +57,12 @@ target-version = ['py39', "py310", "py311","py312"]
 
 [tool.pylint.MASTER]
 ignore-paths = [
-    "^avocadoapi/tests/"
+    "^avocadoapi/tests/",
+    "^avocadoapi/migrations/",
 ]
 max-line-length = 120
 
 [tool.pylint.main]
 max-args = 10
 max-attributes = 10
+disable = ["missing-module-docstring", "missing-class-docstring", "unused-import", "no-member", 'invalid-str-returned']

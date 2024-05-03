@@ -1,4 +1,4 @@
-from ..utils.Trie import Trie
+from ..utils.trie import Trie
 from django.test import TestCase
 
 
