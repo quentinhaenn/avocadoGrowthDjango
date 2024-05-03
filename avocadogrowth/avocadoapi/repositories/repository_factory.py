@@ -1,7 +1,7 @@
 """
 Factory class to create repository objects based on the model name.
 """
-from . import mentors, stacks, users, requests
+from . import mentors, stacks, users_repository, requests
 
 
 class RepositoryFactory:
@@ -19,7 +19,7 @@ class RepositoryFactory:
         if model == "stack":
             return stacks.StackRepository()
         if model == "user":
-            return users.UserRepository()
+            return users_repository.UserRepository()
         if model == "request":
             return requests.RequestRepository()
         raise ValueError(f"Model {model} not found")
