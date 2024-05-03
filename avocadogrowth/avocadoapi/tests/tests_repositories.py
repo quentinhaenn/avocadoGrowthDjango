@@ -4,33 +4,83 @@ from avocadoapi.repositories.repository_factory import RepositoryFactory
 
 user_john = {
     "first_name": "John",
-    "last_name" : "Doe",
-    "email"     : "john@doe.com",
-    "password"  : "password",
+    "last_name": "Doe",
+    "email": "john@doe.com",
+    "password": "password",
 }
 user_jerry = {
     "first_name": "Jerry",
-    "last_name" : "Doe",
-    "email"     : "jerry@doe.com",
-    "password"  : "password",
+    "last_name": "Doe",
+    "email": "jerry@doe.com",
+    "password": "password",
 }
 
 user_jane = {
     "first_name": "Jane",
-    "last_name" : "Doe",
-    "email"     : "jane@doe.com",
-    "password"  : "password",
+    "last_name": "Doe",
+    "email": "jane@doe.com",
+    "password": "password",
 }
 
-stack_list = ["python", "java", "javascript", "typescript", "c++", "c#", "ruby", "php", "swift", "kotlin",
-              "go", "rust", "scala", "r", "perl", "haskell", "shell", "powershell", "sql", "nosql",
-              "Data Science", "Data", "Data Analysis", "Data Engineering", "Data Visualization", "Machine Learning"]
+stack_list = [
+    "python",
+    "java",
+    "javascript",
+    "typescript",
+    "c++",
+    "c#",
+    "ruby",
+    "php",
+    "swift",
+    "kotlin",
+    "go",
+    "rust",
+    "scala",
+    "r",
+    "perl",
+    "haskell",
+    "shell",
+    "powershell",
+    "sql",
+    "nosql",
+    "Data Science",
+    "Data",
+    "Data Analysis",
+    "Data Engineering",
+    "Data Visualization",
+    "Machine Learning",
+]
 
-stacks_jerry = ["python", 'java', 'Data Science', 'Data Analysis', 'Data Engineering', 'Data Visualization',
-                'Machine Learning']
-stacks_john = ['javascript', 'typescript', 'c++', 'c#', 'ruby', 'php', 'swift', 'kotlin', 'go', 'rust', 'scala', 'r',
-               'perl', 'haskell', 'shell', 'powershell', 'sql', 'nosql']
-stacks_jane = ['python', 'java', 'javascript', 'typescript']
+stacks_jerry = [
+    "python",
+    "java",
+    "Data Science",
+    "Data Analysis",
+    "Data Engineering",
+    "Data Visualization",
+    "Machine Learning",
+]
+stacks_john = [
+    "javascript",
+    "typescript",
+    "c++",
+    "c#",
+    "ruby",
+    "php",
+    "swift",
+    "kotlin",
+    "go",
+    "rust",
+    "scala",
+    "r",
+    "perl",
+    "haskell",
+    "shell",
+    "powershell",
+    "sql",
+    "nosql",
+]
+stacks_jane = ["python", "java", "javascript", "typescript"]
 
 
 def setUpUsers():
@@ -193,5 +243,10 @@ class TestStackRepository(TestCase):
         stack_repo.create_trie()
         assert stack_repo.autocomplete("py") == ["python"]
         assert stack_repo.autocomplete("java") == ["java", "javascript"]
-        assert stack_repo.autocomplete("Data") == ["data", 'data science', 'data analysis', 'data engineering',
-                                                   'data visualization']
+        assert stack_repo.autocomplete("Data") == [
+            "data",
+            "data science",
+            "data analysis",
+            "data engineering",
+            "data visualization",
+        ]

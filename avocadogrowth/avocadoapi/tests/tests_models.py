@@ -4,15 +4,15 @@ from avocadoapi.models import User, Mentor, Comments, Stacks
 
 user_john = {
     "first_name": "John",
-    "last_name" : "Doe",
-    "email"     : "john@doe.com",
-    "password"  : "password",
+    "last_name": "Doe",
+    "email": "john@doe.com",
+    "password": "password",
 }
 user_jerry = {
     "first_name": "Jerry",
-    "last_name" : "Doe",
-    "email"     : "jerry@doe.com",
-    "password"  : "password",
+    "last_name": "Doe",
+    "email": "jerry@doe.com",
+    "password": "password",
 }
 
 
@@ -217,7 +217,6 @@ class TestCommentsModel(TestCase):
         self.assertEqual(comment.from_user.first_name, "John")
         self.assertEqual(comment.to_user.user.first_name, "Jerry")
 
-
     def comment_updating(self):
         setUpComments()
         comment = Comments.objects.get(from_user=User.objects.get(email="john@doe.com"))
@@ -232,7 +231,6 @@ class TestCommentsModel(TestCase):
         comment.delete()
         self.assertEqual(Comments.objects.count(), 0)
         assert not Comments.objects.filter(from_user=User.objects.get(email="john@doe.com")).exists()
-
 
     def test_comment_deleting_all(self):
         setUpComments()
@@ -303,7 +301,6 @@ class TestStacksModel(TestCase):
         mentor_jerry = Mentor.objects.get(user=jerry)
         self.assertEqual(mentor_jerry.stacks.count(), 0)
 
-
     def test_stack_listing(self):
         python = Stacks(tag="Python")
         python.save()
@@ -348,5 +345,3 @@ class TestStacksModel(TestCase):
         java.save()
         Stacks.objects.all().delete()
         self.assertEqual(Stacks.objects.count(), 0)
-
-

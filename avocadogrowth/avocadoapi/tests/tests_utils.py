@@ -54,7 +54,7 @@ class TestTrie(TestCase):
         string_trie = Trie()
         string_trie.initialize(string)
         string_with_separator_trie = Trie()
-        string_with_separator_trie.initialize(string_with_separator, separator=',')
+        string_with_separator_trie.initialize(string_with_separator, separator=",")
         assert string_trie is not None
         assert string_with_separator_trie is not None
         assert string_trie.search("python")

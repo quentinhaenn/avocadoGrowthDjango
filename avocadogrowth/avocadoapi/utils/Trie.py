@@ -54,7 +54,7 @@ class Trie:
         if child_node.children == {} and not child_node.is_end_of_word:
             del node.children[char]
 
-    def _from_str(self, string, separator=' '):
+    def _from_str(self, string, separator=" "):
         words = string.split(separator)
         for word in words:
             self.insert(word)

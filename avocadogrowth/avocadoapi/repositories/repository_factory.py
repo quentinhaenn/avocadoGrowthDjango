@@ -7,12 +7,12 @@ class RepositoryFactory:
 
     @classmethod
     def create_repository(cls, model):
-        if model == 'mentor':
+        if model == "mentor":
             return mentors.MentorRepository()
-        elif model == 'stack':
+        elif model == "stack":
             return stacks.StackRepository()
-        elif model == 'user':
+        elif model == "user":
             return users.UserRepository()
-        elif model == 'request':
+        elif model == "request":
             return requests.RequestRepository()
         raise ValueError(f"Model {model} not found")

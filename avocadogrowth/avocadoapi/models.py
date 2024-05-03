@@ -28,8 +28,8 @@ class User(AbstractUser):
     is_banned = models.BooleanField(default=False)
     bio = models.TextField(blank=True, null=True)
     urls = models.JSONField(blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    mentors = models.ManyToManyField('Mentor', symmetrical=False, default=None, related_name='my_mentors')
+    profile_picture = models.ImageField(upload_to="profile_pictures/", blank=True, null=True)
+    mentors = models.ManyToManyField("Mentor", symmetrical=False, default=None, related_name="my_mentors")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     learning_stacks = models.ManyToManyField(Stacks, default=None)
@@ -75,8 +75,8 @@ class Comments(models.Model):
     comment = models.TextField()
     rating = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_commenting')
-    to_user = models.ForeignKey(Mentor, on_delete=models.CASCADE, related_name='mentor_commented')
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_commenting")
+    to_user = models.ForeignKey(Mentor, on_delete=models.CASCADE, related_name="mentor_commented")
     stacks = models.ManyToManyField(Stacks)
 
     def __str__(self):
@@ -92,8 +92,8 @@ class Requests(models.Model):
     id = models.AutoField(primary_key=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_requesting')
-    to_mentor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mentor_requested')
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_requesting")
+    to_mentor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mentor_requested")
     stacks = models.ManyToManyField(Stacks)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
 
