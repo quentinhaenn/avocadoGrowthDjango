@@ -28,8 +28,11 @@ jobs:
         pip install -r requirements.txt
     - name: Run formatters
       run: |
+        cd avocadogrowth
         black .
         flake8 
+        pylint avocadoapi
     - name: Run Tests
       run: |
+        cd avocadogrowth
         python manage.py test
