@@ -32,6 +32,11 @@ jobs:
         black .
         flake8 
         pylint avocadoapi
+    - name: Run migrations
+      run: |
+        cd avocadogrowth
+        python manage.py makemigrations avocadoapi
+        python manage.py migrate
     - name: Run Tests
       run: |
         cd avocadogrowth
