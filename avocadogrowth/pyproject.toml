@@ -40,7 +40,8 @@ exclude = [
     ".pytest_cache",
     ".git",
     "**/tests/",
-    "venv//",
+    "venv/",
+    "avocadoapi/migrations/",
     "build/",
     ]
 filename = "*.py"
