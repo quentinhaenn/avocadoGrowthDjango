@@ -23,16 +23,16 @@ class TestLoginLogoutRegister(TestCase):
             }
         )
 
-        self.assertEquals(response.status_code, 201)
-        self.assertEquals(response.content, b'User created successfully')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content, b'User created successfully')
 
     def test_register_missing_data(self):
         response = self.client.post(
             "/api/register/",
             {}
         )
-        self.assertEquals(response.status_code, 400)
-        self.assertEquals(response.content, b'Email is required')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, b'Email is required')
 
     def test_register_missing_password(self):
         response = self.client.post(
@@ -41,8 +41,8 @@ class TestLoginLogoutRegister(TestCase):
                 'email': 'test@test.com'
             }
         )
-        self.assertEquals(response.status_code, 400)
-        self.assertEquals(response.content, b'Password is required')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, b'Password is required')
 
     def test_login(self):
         user = self.user_repo.get(email=self.credentials['email'])
@@ -52,6 +52,6 @@ class TestLoginLogoutRegister(TestCase):
         # send login data
         response = self.client.post('/api/login/', self.credentials, follow=True)
         # should be logged in now
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         # check if logged in
-        self.assertEquals(response.content, b'Welcome, 1!')
+        self.assertEqual(response.content, b'Welcome, 1!')
