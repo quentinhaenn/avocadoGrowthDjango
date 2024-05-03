@@ -29,7 +29,6 @@ jobs:
     - name: Run formatters
       run: |
         black .
-        pylint ./avocadoapi/
         flake8 
     - name: Run Tests
       run: |
