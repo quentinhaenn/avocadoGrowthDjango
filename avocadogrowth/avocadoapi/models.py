@@ -3,6 +3,36 @@ Models for the Avocado API
 """
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+from django.contrib.auth.base_user import BaseUserManager
+
+AUTH_USER_MODEL = settings.AUTH_USER_MODEL
+
+
+class UserManager(BaseUserManager):
+    def create_user(self, **kwargs):
+        # pylint: disable=missing-function-docstring
+        if "email" not in kwargs:
+            raise ValueError("Email is required")
+        if "password" not in kwargs:
+            raise ValueError("Password is required")
+        user = self.model(
+            email=self.normalize_email(kwargs["email"]),
+        )
+        user.set_password(kwargs["password"])
+        kwargs.pop("password")
+        for key, value in kwargs.items():
+            setattr(user, key, value)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, **kwargs):
+        # pylint: disable=missing-function-docstring
+        # pylint: disable=missing-function-docstring
+        user = self.create_user(**kwargs)
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
 
 
 class Stacks(models.Model):
@@ -26,23 +56,24 @@ class User(AbstractUser):
         "O": "Other",
     }
     id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
     username = models.CharField(max_length=30, blank=True, null=True, unique=True)
     email = models.EmailField(max_length=100, unique=True)
-    password = models.CharField(max_length=100)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True, null=True)
     age = models.IntegerField(blank=True, null=True)
     online_status = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
     bio = models.TextField(blank=True, null=True)
     urls = models.JSONField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to="profile_pictures/", blank=True, null=True)
     mentors = models.ManyToManyField("Mentor", symmetrical=False, default=None, related_name="my_mentors")
-    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     learning_stacks = models.ManyToManyField(Stacks, default=None)
 
+    objects = UserManager()
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
     def is_mentor(self):
         # pylint: disable=missing-function-docstring
         return Mentor.objects.filter(user=self).exists()
@@ -63,7 +94,7 @@ class Mentor(models.Model):
     """
     Model for Mentor
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     description = models.TextField()
     rating = models.FloatField(null=True, blank=True)
     is_available = models.BooleanField(default=False)
@@ -96,7 +127,7 @@ class Comments(models.Model):
     comment = models.TextField()
     rating = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_commenting")
+    from_user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_commenting")
     to_user = models.ForeignKey(Mentor, on_delete=models.CASCADE, related_name="mentor_commented")
     stacks = models.ManyToManyField(Stacks)
 
@@ -116,8 +147,8 @@ class Requests(models.Model):
     id = models.AutoField(primary_key=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_requesting")
-    to_mentor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mentor_requested")
+    from_user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_requesting")
+    to_mentor = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="mentor_requested")
     stacks = models.ManyToManyField(Stacks)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
 

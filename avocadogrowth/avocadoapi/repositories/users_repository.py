@@ -14,6 +14,11 @@ class UserRepository(BaseRepository):
     model = get_user_model()
 
     @classmethod
+    def create(cls, **kwargs):
+        # pylint: disable=missing-function-docstring
+        return cls.model.objects.create_user(**kwargs)
+
+    @classmethod
     def add_mentor(cls, user, mentor):
         # pylint: disable=missing-function-docstring
         user.mentors.add(mentor)
@@ -26,11 +31,6 @@ class UserRepository(BaseRepository):
         user.save()
 
     @classmethod
-    def get_mentor_infos(cls, user):
-        # pylint: disable=missing-function-docstring
-        return MentorRepository.get(user=user)
-
-    @classmethod
     def add_learning_stack(cls, user, stack_tag):
         # pylint: disable=missing-function-docstring
         stack = StackRepository.get(tag=stack_tag)
@@ -38,9 +38,9 @@ class UserRepository(BaseRepository):
         user.save()
 
     @classmethod
-    def remove_learning_stack(cls, user, stack_tag):
+    def remove_learning_stack(cls, user, stack):
         # pylint: disable=missing-function-docstring
-        stack = StackRepository.get(tag=stack_tag)
+        stack = StackRepository.get(tag=stack)
         user.learning_stacks.remove(stack)
         user.save()
 
@@ -58,3 +58,8 @@ class UserRepository(BaseRepository):
     def get_mentors(cls, user):
         # pylint: disable=missing-function-docstring
         return user.mentors.all()
+
+    @classmethod
+    def get_mentor_infos(cls, user):
+        # pylint: disable=missing-function-docstring
+        return MentorRepository.get(user=user)
