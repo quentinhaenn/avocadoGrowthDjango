@@ -28,6 +28,16 @@ class MentorRepository(BaseRepository):
         mentor.save()
 
     @classmethod
+    def get_comments(cls, mentor):
+        # pylint: disable=missing-function-docstring
+        return cls.model.get_comments(mentor)
+
+    @classmethod
+    def get_requests(cls, mentor):
+        # pylint: disable=missing-function-docstring
+        return cls.model.get_requests(mentor)
+
+    @classmethod
     def get_stacks(cls, mentor):
         # pylint: disable=missing-function-docstring
         return mentor.stacks.all()

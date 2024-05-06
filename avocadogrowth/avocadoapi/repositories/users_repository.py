@@ -63,3 +63,8 @@ class UserRepository(BaseRepository):
     def get_mentor_infos(cls, user):
         # pylint: disable=missing-function-docstring
         return MentorRepository.get(user=user)
+
+    @classmethod
+    def get_requests(cls, user):
+        # pylint: disable=missing-function-docstring
+        return user.get_requests()

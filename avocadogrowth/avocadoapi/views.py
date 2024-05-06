@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, response
-from django.contrib.auth import authenticate, alogin, alogout, login, logout
+from django.core import serializers
+from django.shortcuts import redirect
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .repositories.repository_factory import RepositoryFactory
-from .repositories.users_repository import UserRepository
 
-
+user_repo = RepositoryFactory.create_repository("user")
+mentor_repo = RepositoryFactory.create_repository("mentor")
+stack_repo = RepositoryFactory.create_repository("stack")
+request_repo = RepositoryFactory.create_repository("request")
 # Create your views here.
 def home(request):
     # pylint: disable=missing-function-docstring
@@ -66,7 +69,6 @@ def register(request):
         return HttpResponse("Email is required", status=400)
     if not user_password:
         return HttpResponse("Password is required", status=400)
-    user_repo = RepositoryFactory.create_repository("user")
     user_data = {
         "email"   : user_email,
         "password": user_password
@@ -80,11 +82,49 @@ def register(request):
     return HttpResponse("User created successfully", status=201)
 
 
+def get_user_info(user):
+    user_infos = {
+        "first_name": user.first_name,
+        "last_name" : user.last_name,
+    }
+    mentors = user_repo.get_mentors(user)
+    if mentors:
+        user_infos["mentors"] = serializers.serialize("json", mentors)
+    return user_infos
+
+def get_user_comments(user):
+    if user_repo.is_mentor(user):
+        comments = mentor_repo.get_comments(user)
+        return serializers.serialize("json", comments)
+    return None
+
+
+def get_user_requests(user):
+    if user_repo.is_mentor(user):
+        mentor = user_repo.get_mentor_infos(user)
+        mentor_requests = serializers.serialize("json", mentor_repo.get_requests(mentor))
+    else:
+        mentor_requests = None
+    my_requests = serializers.serialize("json", user_repo.get_requests(user))
+    return {
+        "mentor_requests": mentor_requests,
+        "my_requests"    : my_requests
+    }
+
+
 def dashboard(request):
     # pylint: disable=missing-function-docstring
     # pylint: disable=unused-argument
     if request.user.is_authenticated:
-        return HttpResponse(f"Welcome, {request.user.username if request.user.username else request.user.email}!")
-
+        user = user_repo.get(email=request.user.email)
+        user_infos = get_user_info(user)
+        user_comments = get_user_comments(user)
+        user_requests = get_user_requests(user)
+        user_data = {
+            "user"    : user_infos,
+            "comments": user_comments,
+            "requests": user_requests
+        }
+        return JsonResponse(user_data)
     messages.error(request, "Please login to view this page")
     return redirect("login")

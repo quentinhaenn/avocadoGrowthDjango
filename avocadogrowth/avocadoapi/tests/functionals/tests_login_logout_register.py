@@ -54,9 +54,7 @@ class TestLoginLogoutRegister(TestCase):
         response = self.client.post('/api/login/', self.credentials, follow=True)
         # should be logged in now
         self.assertEqual(response.status_code, 200)
-        # check if logged in
-        string = f"Welcome, {user.username if user.username else user.email}!"
-        self.assertEqual(response.content, string.encode())
+        self.assertRedirects(response, '/api/dashboard/')
 
     def test_login_invalid_credentials(self):
         response = self.client.post(
@@ -95,8 +93,7 @@ class TestLoginLogoutRegister(TestCase):
         self.client.login(email=self.credentials['email'], password=self.credentials['password'])
         response = self.client.get('/api/dashboard/')
         self.assertEqual(response.status_code, 200)
-        string = f"Welcome, {user.username if user.username else user.email}!"
-        self.assertEqual(response.content, string.encode())
+
 
     def test_access_dashboard_unauthenticated(self):
         response = self.client.get('/api/dashboard/')
