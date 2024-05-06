@@ -85,6 +85,6 @@ def dashboard(request):
     # pylint: disable=unused-argument
     if request.user.is_authenticated:
         return HttpResponse(f"Welcome, {request.user.username if request.user.username else request.user.email}!")
-    else:
-        messages.error(request, "Please login to view this page")
-        return redirect("login")
+
+    messages.error(request, "Please login to view this page")
+    return redirect("login")
