@@ -14,6 +14,9 @@ def home(request):
 
 
 def login_post(request):
+    """
+    Handle login request
+    """
     email = request.POST.get("email")
     password = request.POST.get("password")
     if not email:
