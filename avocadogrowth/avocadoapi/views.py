@@ -37,10 +37,9 @@ def login_user(request):
     # pylint: disable=unused-argument
     if request.method == "POST":
         return login_post(request)
-    elif request.method == "GET":
+    if request.method == "GET":
         return HttpResponse("waiting for login", status=204)
-    else:
-        return HttpResponse("Method not allowed", status=405)
+    return HttpResponse("Method not allowed", status=405)
 
 
 def logout_user(request):
@@ -48,6 +47,8 @@ def logout_user(request):
     # pylint: disable=unused-argument
     if request.method != "POST":
         return HttpResponse("Method not allowed", status=405)
+    if not request.user.is_authenticated:
+        return HttpResponse("You are not logged in", status=405)
     logout(request)
     messages.success(request, "Logout successful")
     return HttpResponse("Logout successful", status=200)

@@ -101,3 +101,18 @@ class TestLoginLogoutRegister(TestCase):
     def test_access_dashboard_unauthenticated(self):
         response = self.client.get('/api/dashboard/')
         self.assertRedirects(response, '/api/login/', status_code=302, target_status_code=204)
+
+    def test_logout(self):
+        user = self.user_repo.get(email=self.credentials['email'])
+        model = get_user_model()
+        assert isinstance(user, model)
+        assert user is not None
+        self.client.login(email=self.credentials['email'], password=self.credentials['password'])
+        response = self.client.post('/api/logout/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, b'Logout successful')
+
+    def test_logout_not_logged_in(self):
+        response = self.client.post('/api/logout/')
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.content, b'You are not logged in')
