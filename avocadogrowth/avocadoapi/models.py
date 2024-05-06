@@ -72,6 +72,8 @@ class User(AbstractUser):
 
     objects = UserManager()
 
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
     def is_mentor(self):
         # pylint: disable=missing-function-docstring
         return Mentor.objects.filter(user=self).exists()
